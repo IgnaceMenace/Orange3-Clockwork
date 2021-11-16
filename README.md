@@ -1,2 +1,7 @@
-# Clockwork project by MARTENS Loïck, PARMENTIER Ignace et TACK Cyrille 
-This project aims to create an add-on dedicated for the predictive maintenance for the Orange3 software
+# Clockwork project
+
+*by MARTENS Loïck, PARMENTIER Ignace et TACK Cyrille.*
+
+## Main goal
+
+- Developing a library of predictive maintenance based on machine learning for the no-code software Orange3
