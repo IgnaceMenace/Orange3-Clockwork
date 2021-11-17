@@ -32,6 +32,7 @@ setup(
 #    url='__url__',
     packages= find_packages(),
     include_package_data=True,
+    PACKAGE_DATA ='orange.clockwork.widgets',
     python_requires=">=3.7.*",
     install_requires=['Orange3'],
     license='__license__',
@@ -39,7 +40,7 @@ setup(
     entry_points={
             # Entry points that marks this package as an orange add-on. If set, addon will
     # be shown in the add-ons manager even if not published on PyPi.
-        'console_scripts': ['py-package-template=py_pkg.entry_points:main'],
+#        'console_scripts': ['py-package-template=py_pkg.entry_points:main'],
             'orange3.addon': (
         'clockwork = orange.clockwork',
     ),
