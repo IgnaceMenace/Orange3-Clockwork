@@ -1,10 +1,9 @@
 from AnyQt.QtWidgets import QLabel
 from Orange.widgets.widget import OWWidget
 
-
 class MyWidget(OWWidget):
     name = "First Widget"
-    icon = "icons/widget1.svg"
+    icon = "/home/pugnace/Desktop/git/Orange3-Clockwork/orange/clockwork/widgets/icons/widget1.svg"
     
     
     def __init__(self):
