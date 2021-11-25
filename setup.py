@@ -16,7 +16,7 @@ setup(
 
     packages= find_packages(),
     include_package_data=True,
-    PACKAGE_DATA ='orange.clockwork.widgets',
+    PACKAGE_DATA ='orangeML.clockworkML.widgetsML',
     python_requires=">=3.7.*",
     install_requires=['Orange3'],
     license='__license__',
@@ -24,11 +24,11 @@ setup(
     entry_points={
 
             'orange3.addon': (
-        'clockwork = orange.clockwork',
+        'clockwork = orangeML.clockworkML',
     ),
 
             'orange.widgets': (
-        'Predictive maintenance = orange.clockwork.widgets',
+        'Predictive maintenance = orangeML.clockworkML.widgetsML',
     ),
     },
     classifiers=[

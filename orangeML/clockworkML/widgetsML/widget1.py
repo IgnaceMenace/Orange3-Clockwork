@@ -9,8 +9,7 @@ class widget1(OWWidget):
     number = 2
     def __init__(self):
         super().__init__()
-        a = float(input("entrer le nombre : "))
-        gui.widgetLabel(self.controlArea, "Ca marche ? " + str(a*2))
+        gui.widgetLabel(self.controlArea, "Ca marche ? " )
 
 if __name__ == "__main__":
     from Orange.widgets.utils.widgetpreview import WidgetPreview  # since Orange 3.20.0
