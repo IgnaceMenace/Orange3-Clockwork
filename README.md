@@ -1,6 +1,6 @@
 # Clockwork project
 
-*by MARTENS Loïck, PARMENTIER Ignace et TACK Cyrille.*
+*by MARTENS Loïc, PARMENTIER Ignace et TACK Cyrille.*
 
 *Project manager : M. VACHAUDEZ*
 ## Main goal
