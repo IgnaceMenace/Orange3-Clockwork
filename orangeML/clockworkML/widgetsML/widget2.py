@@ -1,4 +1,3 @@
-import numpy
 from Orange.widgets.widget import OWWidget
 from Orange.widgets.utils.signals import Input, Output
 from Orange.widgets import settings, widget, gui
