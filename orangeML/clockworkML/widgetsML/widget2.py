@@ -28,6 +28,7 @@ class widget2(OWWidget):
     def set_data(self, dataset):
         if dataset is not None:
             print("It works !")
+            self.Outputs.ouputWidget2.send(dataset)
         else:
             self.infoa.setText('No data on input yet, waiting to get something.')
             self.Outputs.sample.send("Sampled Data")
