@@ -9,6 +9,8 @@
 
 ## Installation guide
 
+Note that on Windows, if it doesn't work, you should execute git command in the git CMD and cd and pip in the anaconda prompt or python prompt
+
 `git clone https://github.com/IgnaceMenace/Orange3-Clockwork`
 
 `cd Orange3-Clockwork`
