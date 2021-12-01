@@ -1,3 +1,4 @@
+import Orange
 from Orange.widgets.widget import OWWidget
 from Orange.widgets.utils.signals import Input, Output
 from Orange.widgets import settings, widget, gui
@@ -27,6 +28,15 @@ class widget2(OWWidget):
     def set_data(self, dataset):
         if dataset is not None:
             print("It works !")
+            print(dataset.shuffle())
+            print("Column ID is : " , dataset.columns)
+            print("Domain is : " , dataset.domain)
+#            if dataset.owns_instances() :
+#                print("Owner of the table not available")
+#            else :
+#                print("Owner is : " , dataset.owner )
+#            print("Table version is : ",dataset.version)
+            print(dataset)
             self.Outputs.ouputWidget2.send(dataset)
         else:
             self.infoa.setText('No data on input yet, waiting to get something.')
