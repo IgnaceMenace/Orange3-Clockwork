@@ -15,7 +15,6 @@ class widget1(OWWidget):
         ouputwidget1 = Output("first output", int)
     class error(widget.OWWidget.Error):
         defaultError = Msg("Error while treating data")
-    
     def __init__(self):
         super().__init__()
         print("test")
