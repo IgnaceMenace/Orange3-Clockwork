@@ -38,3 +38,5 @@ FFTG(time, amplitude + amplitude1)
 
 def FFTV(xInput,yInput):
     print("FFTV")
+
+#rajouter le if name = main
