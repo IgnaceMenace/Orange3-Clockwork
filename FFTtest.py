@@ -26,17 +26,6 @@ def FFTG(xInput, yInput):
     plt.plot(xSpect,ySpect)
     plt.show()
 
-#FFTG(xArray, yArray)
-
-time = numpy.arange(0,100,0.1)
-amplitude = 2*numpy.sin(time)
-
-amplitude1 = numpy.cos(2*time)
-FFTG(time, amplitude)
-#FFTG(time, amplitude1)
-#print("time", time)
-#FFTG(time, amplitude + amplitude1)
-
 def FFTV(xInput,yInput):
     period = numpy.diff(xInput).mean() #determine period by the average of each element minus the one before
     xLength = int(len(xInput)) #determine length of the array
