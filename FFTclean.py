@@ -12,6 +12,7 @@ def FFTG(xInput, yInput):
     stop = 1.0/(2.0*period)  #last x value
     num = int(xLength/2)
     ywm = fft(yInput)
+    
     xSpect = np.linspace(start, stop, num, dtype = float)
     ySpect = 2.0/xLength * np.abs(ywm[0:int(xLength/2)])
 
