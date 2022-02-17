@@ -47,7 +47,6 @@ class widgetFFT(OWWidget):
                 #ywf = fft(yInput*filtering)
                 ywf = fft(yInput)
                 ySpectral = 2.0/xLength * numpy.abs(ywf[0:int(xLength/2)])
-                print("ySpectral is : " , ySpectral)
 
                 return [xSpectral , ySpectral]
 
