@@ -49,10 +49,6 @@ class widgetFFT(OWWidget):
                 ySpectral = 2.0/xLength * numpy.abs(ywf[0:int(xLength/2)])
                 print("ySpectral is : " , ySpectral)
 
-
-                #matplotlib.pyplot.plot(xSpectral,ySpectral)
-                #matplotlib.pyplot.show()
-
                 return [xSpectral , ySpectral]
 
             def FFTV(self,xInput,yInput):
@@ -88,8 +84,6 @@ class widgetFFT(OWWidget):
                 ySpectral = numpy.divide(ySpectral[1:],xSpectral[1:])
                 ySpectral = numpy.concatenate(([0],ySpectral))
 
-                #matplotlib.pyplot.plot(xSpectral,ySpectral)
-                #matplotlib.pyplot.show()
                 return [xSpectral , ySpectral]
         time = numpy.arange(0,100,0.1)
         amplitude = 2*numpy.sin(time)
