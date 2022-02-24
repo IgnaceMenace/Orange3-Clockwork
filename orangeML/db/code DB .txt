@@ -1,0 +1,150 @@
+============
+Création DB
+============
+-- Database: ProjetIA
+
+-- DROP DATABASE IF EXISTS "ProjetIA";
+
+CREATE DATABASE "ProjetIA"
+    WITH 
+    OWNER = "Loicm"
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'French_Belgium.1252'
+    LC_CTYPE = 'French_Belgium.1252'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+
+========================
+Création table Bearings 
+========================
+
+-- Table: public.Bearings
+
+-- DROP TABLE IF EXISTS public."Bearings";
+
+CREATE TABLE IF NOT EXISTS public."Bearings"
+(
+    "IDBearing" integer NOT NULL,
+    "BearingType" character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    "BR" smallint,
+    "FTF" numeric(10,3) DEFAULT NULL::numeric,
+    "BSF" numeric(10,3) DEFAULT NULL::numeric,
+    "BPFO" numeric(10,3) DEFAULT NULL::numeric,
+    "BPFI" numeric(10,3) DEFAULT NULL::numeric,
+    CONSTRAINT "Bearings_pkey" PRIMARY KEY ("IDBearing")
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."Bearings"
+    OWNER to "Loicm";
+
+=====================
+Création table Belts
+=====================
+
+-- Table: public.Belts
+
+-- DROP TABLE IF EXISTS public."Belts";
+
+CREATE TABLE IF NOT EXISTS public."Belts"
+(
+    "IDBelt" integer NOT NULL,
+    "BeltType" character varying(20) COLLATE pg_catalog."default",
+    "BeltFreq" numeric(10,3) DEFAULT NULL::numeric,
+    "Speed2Out" numeric(10,3) DEFAULT NULL::numeric,
+    "Sheave1" numeric(10,3) DEFAULT NULL::numeric,
+    "Sheave2" numeric(10,3) DEFAULT NULL::numeric,
+    "BeltLenght" numeric(10,3) DEFAULT NULL::numeric,
+    CONSTRAINT "Belts_pkey" PRIMARY KEY ("IDBelt")
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."Belts"
+    OWNER to "Loicm";
+
+==============================
+Création table DefaultBearing
+==============================
+
+-- Table: public.DefaultBearing
+
+-- DROP TABLE IF EXISTS public."DefaultBearing";
+
+CREATE TABLE IF NOT EXISTS public."DefaultBearing"
+(
+    "IDVibration" integer NOT NULL,
+    "AnalyseType" character varying(4) COLLATE pg_catalog."default" NOT NULL,
+    "IDBearing" integer[],
+    "BR" smallint,
+    "FTF" numeric(10,3) DEFAULT NULL::numeric,
+    "BSF" numeric(10,3) DEFAULT NULL::numeric,
+    "BPFO" numeric(10,3) DEFAULT NULL::numeric,
+    "BPFI" numeric(10,3) DEFAULT NULL::numeric
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."DefaultBearing"
+    OWNER to "Loicm";
+
+=====================
+Création DefaultBelt
+=====================
+
+-- Table: public.DefaultBelt
+
+-- DROP TABLE IF EXISTS public."DefaultBelt";
+
+CREATE TABLE IF NOT EXISTS public."DefaultBelt"
+(
+    "IDVibration" integer NOT NULL,
+    "Analyse" character varying(4) COLLATE pg_catalog."default" NOT NULL,
+    "IDBelt" integer,
+    "BeltFreq" numeric(10,3) DEFAULT NULL::numeric,
+    "Speed2out" numeric(10,3) DEFAULT NULL::numeric,
+    "Sheave1" numeric(10,3) DEFAULT NULL::numeric,
+    "Sheave2" numeric(10,3) DEFAULT NULL::numeric,
+    "BeltLenght" numeric(10,3) DEFAULT NULL::numeric
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."DefaultBelt"
+    OWNER to "Loicm";
+-- Index: indexBelt
+
+-- DROP INDEX IF EXISTS public."indexBelt";
+
+CREATE INDEX IF NOT EXISTS "indexBelt"
+    ON public."DefaultBelt" USING btree
+    ("IDBelt" ASC NULLS LAST, "IDVibration" ASC NULLS LAST)
+    INCLUDE("IDBelt", "IDVibration")
+    TABLESPACE pg_default;
+
+===================================
+Création de la table vibrationData
+===================================
+
+-- Table: public.VibrationData
+
+-- DROP TABLE IF EXISTS public."VibrationData";
+
+CREATE TABLE IF NOT EXISTS public."VibrationData"
+(
+    "IDVibration" integer NOT NULL DEFAULT nextval('"Vibration Data_ID Vibration_seq"'::regclass),
+    "Date" timestamp without time zone,
+    "Area" character varying(20) COLLATE pg_catalog."default",
+    "Equipment" character varying(20) COLLATE pg_catalog."default",
+    "MeasurmentPoint" character varying(5) COLLATE pg_catalog."default",
+    "Load" numeric(8,2),
+    "Measure" numeric(20,10)[] NOT NULL,
+    "Time" numeric(20,10)[] NOT NULL,
+    CONSTRAINT "Vibration Data_pkey" PRIMARY KEY ("IDVibration")
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."VibrationData"
+    OWNER to "Loicm";
