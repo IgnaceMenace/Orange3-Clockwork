@@ -3,6 +3,12 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+test
+====
+subtest
+-------
+
+
 Welcome to OrangeClockwork's documentation!
 ===========================================
 
@@ -18,3 +24,20 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+Testing area
+============
+
+So this is a testing area I just want to implement everything little by little µ
+and test things before
+
+First subtitle
+--------------
+
+Just checking that subtitle
+
+Installation process
+--------------------
+
+:code: 'pip install '
+
