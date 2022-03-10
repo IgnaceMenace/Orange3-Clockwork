@@ -1,6 +1,6 @@
 from configparser import ConfigParser
 
-def config (filename = database.ini, section ="postgresql"):
+def config (filename = r"C:\Users\Lenovo\Documents\Projet MA1\Orange3-Clockwork\orangeML\db\database.ini", section ="postgresql"):
     
     parser = ConfigParser()
     parser.read(filename)
