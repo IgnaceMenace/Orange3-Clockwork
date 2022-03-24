@@ -17,12 +17,12 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'OrangeClockwork'
-copyright = '2022, MARTENS Loïc PARMENTIER Ignace TACK Cyrille'
-author = 'MARTENS Loïc PARMENTIER Ignace TACK Cyrille'
+project = 'Clockwork'
+copyright = '2022, MARTENS Loïc, PARMENTIER Ignace, TACK Cyrille'
+author = 'MARTENS Loïc, PARMENTIER Ignace, TACK Cyrille'
 
 # The full version, including alpha/beta/rc tags
-release = '1.0'
+release = '0.2'
 
 
 # -- General configuration ---------------------------------------------------
@@ -58,4 +58,4 @@ html_theme = 'alabaster'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-#html_static_path = ['_static']
+html_static_path = ['_static']
