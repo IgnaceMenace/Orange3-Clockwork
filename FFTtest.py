@@ -1,7 +1,8 @@
 import numpy
 from scipy.fftpack import fft
+from scipy.signal import find_peaks
 from scipy import signal
-import matplotlib.pyplot
+import matplotlib.pyplot as plt
 
 
 def FFTG(xInput, yInput):
@@ -91,7 +92,7 @@ if __name__ == "__main__":
     [xSpectralFFTV,ySpectralFFTV] = FFTV(time, amplitude + amplitude1)
 
     # Initialise the subplot function using number of rows and columns
-    figure, axis = matplotlib.pyplot.subplots(1,2)
+    figure, axis = plt.subplots(1,2)
     axis[0].plot(xSpectralFFTG,ySpectralFFTG)
     axis[0].set_title("FFTG")
     axis[0].set_xlabel ('Fréquences (Hz)')
@@ -100,4 +101,18 @@ if __name__ == "__main__":
     axis[1].set_title("FFTV")
     axis[1].set_xlabel ('Fréquences (Hz)')
     axis[1].set_ylabel ('Amplitude')
-    matplotlib.pyplot.show()
+
+    ## find peaks
+
+    peaksFFTG = find_peaks(ySpectralFFTG, height = 0, threshold = 0.75)
+    peaksFFTV = find_peaks(ySpectralFFTV, height = 1000, threshold = 1, distance = 1)
+    heightFFTG = peaksFFTG[1]['peak_heights']
+    heightFFTV = peaksFFTV[1]['peak_heights']
+    peaksPosFFTG = xSpectralFFTG[peaksFFTG[0]]
+    peaksPosFFTV = xSpectralFFTV[peaksFFTV[0]]
+    axis[0].scatter(peaksPosFFTG, heightFFTG, color = 'r', s = 15, marker = 'D', label = 'Peaks'    )
+    axis[0].legend()
+    axis[1].scatter(peaksPosFFTV, heightFFTV, color = 'r', s = 15, marker = 'D', label = 'Peaks'    )
+    axis[1].legend()
+
+    plt.show()
