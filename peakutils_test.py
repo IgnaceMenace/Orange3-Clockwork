@@ -1,9 +1,8 @@
 import numpy as np
-import matplotlib.pyplot as plt
+import peakutils 
 from scipy.fftpack import fft
-from scipy import signal
-from scipy.signal import find_peaks
-
+from matplotlib import pyplot as plt
+from peakutils.plot import plot as pplot
 
 def FFTG(xInput, yInput):
     xLength = int(len(xInput)) #determine length of the array
@@ -17,18 +16,22 @@ def FFTG(xInput, yInput):
     xSpect = np.linspace(start, stop, num, dtype = float)
     ySpect = 2.0/xLength * np.abs(ywm[0:int(xLength/2)])
 
-    plt.figure() 
+    plt.figure()
     plt.plot(xSpect,ySpect)
     plt.title('FFTG')
     plt.xlabel('Fréquences (Hz)')
     plt.ylabel('Amplitude')
     plt.show()
-    peaksFFTG = find_peaks(ySpect, height = 0, threshold = 0.75)
-    heightFFTG = peaksFFTG[1]['peak_heights']
-    peaksPosFFTG = xSpect[peaksFFTG[0]]
-    plt.scatter(peaksPosFFTG, heightFFTG, color = 'r', s = 15, marker = 'D', label = 'Peaks'    )
-    plt.legend()
 
+    indexes = peakutils.indexes(ySpect, thres = 0.1, min_dist = 0)
+    print (xSpect[indexes], ySpect[indexes])
+    plt.figure()
+    pplot(xSpect,ySpect, indexes)
+    plt.title('Détection des pics')
+    plt.xlabel('Fréquences (Hz)')
+    plt.ylabel('Amplitude')
+    plt.legend()
+    plt.show()
 
 def FFTV(xInput,yInput):
     xLength = int(len(xInput))
@@ -46,11 +49,23 @@ def FFTV(xInput,yInput):
     y_spect = np.divide(y_spect[1:],x_spect[1:])
     y_spect = np.concatenate(([0],y_spect))
     
+    plt.figure()
+    plt.plot(x_spect,y_spect)
+    plt.title('FFTV')
+    plt.xlabel('Fréquences (Hz)')
+    plt.ylabel('Amplitude')
+    plt.show()
+
+    indexes = peakutils.indexes(y_spect, thres = 0, min_dist = 0)
+    print (x_spect[indexes], y_spect[indexes])
+    plt.figure()
+    pplot(x_spect,y_spect, indexes)
+    plt.title('Détection des pics')
+    plt.xlabel('Fréquences (Hz)')
+    plt.ylabel('Amplitude')
+    plt.legend()
+    plt.show()
     
-
-    return [x_spect, y_spect]
-   
-
 
 # Données du sinus
 time = np.arange(0,100,0.1)
@@ -58,11 +73,13 @@ amplitude = 2*np.sin(time)
 amplitude1 = np.cos(2*time)
 
 # Graphe sinus
+plt.figure()
 plt.plot(time,amplitude)
-plt.show()
 plt.title('Vibration')
 plt.xlabel('Temps')
 plt.ylabel('Amplitude')
+plt.show()
+
 
 # FFTG
 FFTG(time, amplitude)
@@ -72,29 +89,4 @@ FFTG(time, amplitude + amplitude1)
 #FFTV
 
 [x_FFTV, y_FFTV] = FFTV(time,amplitude)
-
-plt.plot(x_FFTV,y_FFTV)
-plt.show()
-plt.title('FFTV')
-plt.xlabel ('Fréquences (Hz)')
-plt.ylabel ('Amplitude')
-
 [x_FFTV, y_FFTV] = FFTV(time,amplitude1)
-
-plt.plot(x_FFTV,y_FFTV)
-plt.show()
-peaksFFTV = find_peaks(y_FFTV, height = 0, threshold = 1, distance = 1)
-heightFFTV = peaksFFTV[1]['peak_heights']
-peaksPosFFTV = x_FFTV[peaksFFTV[0]]
-plt.scatter(peaksPosFFTV, heightFFTV, color = 'r', s = 15, marker = 'D', label = 'Peaks'    )
-plt.legend()
-
-[x_FFTV, y_FFTV] = FFTV(time, amplitude + amplitude1)
-
-plt.plot(x_FFTV,y_FFTV)
-peaksFFTV = find_peaks(y_FFTV, height = 0, threshold = 1, distance = 1)
-heightFFTV = peaksFFTV[1]['peak_heights']
-peaksPosFFTV = x_FFTV[peaksFFTV[0]]
-plt.scatter(peaksPosFFTV, heightFFTV, color = 'r', s = 15, marker = 'D', label = 'Peaks')
-plt.show()
-plt.legend()
