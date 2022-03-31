@@ -88,5 +88,5 @@ FFTG(time, amplitude + amplitude1)
 
 #FFTV
 
-[x_FFTV, y_FFTV] = FFTV(time,amplitude)
-[x_FFTV, y_FFTV] = FFTV(time,amplitude1)
+FFTV(time,amplitude)
+FFTV(time,amplitude1)
