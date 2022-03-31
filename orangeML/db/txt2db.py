@@ -185,7 +185,6 @@ def insert_meas (newQuery, newValues):
         conn.close()
         print ('Database connection closed')
 
-
 if __name__ == '__main__':
     path_brg = r'C:\Users\Lenovo\Documents\Projet MA1\Fichiers BDD\FaultFreqs\Bearings.txt'
     path_blt = r'C:\Users\Lenovo\Documents\Projet MA1\Fichiers BDD\FaultFreqs\Belts.txt'
