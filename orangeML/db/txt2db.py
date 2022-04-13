@@ -188,7 +188,7 @@ def insert_meas (newQuery, newValues):
 if __name__ == '__main__':
     path_brg = r'C:\Users\Lenovo\Documents\Projet MA1\Fichiers BDD\FaultFreqs\Bearings.txt'
     path_blt = r'C:\Users\Lenovo\Documents\Projet MA1\Fichiers BDD\FaultFreqs\Belts.txt'
-    path_meas = r'C:\Users\Lenovo\Documents\Projet MA1\Fichiers BDD\Selected\Belt\EC27.13_ZONE1\AVA-20151221.txt'
+    path_meas = r'C:\Users\Lenovo\Documents\Projet MA1\Fichiers BDD\Selected\Belt\EC27.13_ZONE1\AVA-20160322.txt'
     #brg2db(path_brg)
     #blt2db(path_blt)
-    meas2db(path_meas)
+    #meas2db(path_meas)

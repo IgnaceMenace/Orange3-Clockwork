@@ -4,7 +4,7 @@ from scipy.fftpack import fft
 from matplotlib import pyplot as plt
 from peakutils.plot import plot as pplot
 
-def FFTG(xInput, yInput):
+def FFTG(xInput, yInput, RotationFreq):
     xLength = int(len(xInput)) #determine length of the array
     period = np.diff(xInput).mean() #determine period by the average of each element minus the one before
     
@@ -14,8 +14,8 @@ def FFTG(xInput, yInput):
     ywm = fft(yInput)
     
     xSpect = np.linspace(start, stop, num, dtype = float)
+    xSpect = xSpect/RotationFreq
     ySpect = 2.0/xLength * np.abs(ywm[0:int(xLength/2)])
-
     plt.figure()
     plt.plot(xSpect,ySpect)
     plt.title('FFTG')
@@ -33,7 +33,7 @@ def FFTG(xInput, yInput):
     plt.legend()
     plt.show()
 
-def FFTV(xInput,yInput):
+def FFTV(xInput,yInput, RotationFreq):
     xLength = int(len(xInput))
     Period = np.diff(xInput).mean()
     
@@ -46,9 +46,10 @@ def FFTV(xInput,yInput):
     y_spect = (9810 * (np.sqrt(2)/2))/(2*num*np.pi) * np.abs(ywm[0:num])
     
     x_spect[0] = 0
+    x_spect = x_spect/RotationFreq
     y_spect = np.divide(y_spect[1:],x_spect[1:])
     y_spect = np.concatenate(([0],y_spect))
-    
+
     plt.figure()
     plt.plot(x_spect,y_spect)
     plt.title('FFTV')
@@ -88,14 +89,15 @@ def txtReader (path):
                     data_vibration.append(float(line.split()[1]))
                     line = next(f)
     time = np.array(time_temp)
-    time = time/speed
+    if (speed_unit=="RPM"):
+        RotationFreq = speed/60
     vibration = np.array(data_vibration)
-    print (time, vibration)
-    return (time, vibration)
+    print (time, vibration, RotationFreq)
+    return (time, vibration, RotationFreq)
 
 
 
 path_meas = r'C:\Users\Lenovo\Documents\Projet MA1\Fichiers BDD\Selected\Belt\EC27.13_ZONE1\AVA-20151221.txt'
-(time, vibration) = txtReader(path_meas)
-FFTG(time, vibration)
-FFTV(time, vibration)
+(time, vibration, rotationFrequency) = txtReader(path_meas)
+FFTG(time, vibration, rotationFrequency)
+FFTV(time, vibration, rotationFrequency)
