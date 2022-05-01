@@ -138,25 +138,29 @@ def FaultFinderBearings(x, y):
 
     #Suite [pas finito]
 
-    yLowMax = max(yLow)
-    yLowMaxIndex = yLow.argmax()
-    xLowMax = xLow[yLowMaxIndex]
-    print("Entre 1 et 2,5 ordres, pic maximum : (",xLowMax,",",yLowMax,")")
+    if not ((yLow == 0).all()):
+        yLowMax = max(yLow)
+        yLowMaxIndex = yLow.argmax()
+        xLowMax = xLow[yLowMaxIndex]
+        print("Entre 1 et 2,5 ordres, pic maximum : (",xLowMax,",",yLowMax,")")
 
-    yMidMax = max(yMid)
-    yMidMaxIndex = yMid.argmax()
-    xMidMax = xMid[yMidMaxIndex]
-    print("Entre 2,5 et 4,5 ordres, pic maximum : (",xMidMax,",",yMidMax,")")
+    if not ((yMid == 0).all()):
+        yMidMax = max(yMid)
+        yMidMaxIndex = yMid.argmax()
+        xMidMax = xMid[yMidMaxIndex]
+        print("Entre 2,5 et 4,5 ordres, pic maximum : (",xMidMax,",",yMidMax,")")
 
-    yHighMax = max(yHigh)
-    yHighMaxIndex = yHigh.argmax()
-    xHighMax = xHigh[yHighMaxIndex]
-    print("Entre 4,5 et 20,5 ordres, pic maximum : (",xHighMax,",",yHighMax,")")
+    if not ((yHigh == 0).all()):
+        yHighMax = max(yHigh)
+        yHighMaxIndex = yHigh.argmax()
+        xHighMax = xHigh[yHighMaxIndex]
+        print("Entre 4,5 et 20,5 ordres, pic maximum : (",xHighMax,",",yHighMax,")")
 
-    yVeryHighMax = max(yVeryHigh)
-    yVeryHighMaxIndex = yVeryHigh.argmax()
-    xVeryHighMax = xVeryHigh[yVeryHighMaxIndex]
-    print("Entre 20,5 et 1000 ordres, pic maximum : (",xVeryHighMax,",",yVeryHighMax,")")
+    if not ((yVeryHigh == 0).all()):
+        yVeryHighMax = max(yVeryHigh)
+        yVeryHighMaxIndex = yVeryHigh.argmax()
+        xVeryHighMax = xVeryHigh[yVeryHighMaxIndex]
+        print("Entre 20,5 et 1000 ordres, pic maximum : (",xVeryHighMax,",",yVeryHighMax,")")
 
 
 
