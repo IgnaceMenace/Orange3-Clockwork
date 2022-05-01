@@ -4,6 +4,7 @@ from scipy.fftpack import fft
 from matplotlib import pyplot as plt
 from peakutils.plot import plot as pplot
 
+
 def FFTG(xInput, yInput, RotationFreq):
     xLength = int(len(xInput)) #determine length of the array
     period = np.diff(xInput).mean() #determine period by the average of each element minus the one before
@@ -23,15 +24,21 @@ def FFTG(xInput, yInput, RotationFreq):
     plt.ylabel('Amplitude')
     plt.show()
 
-    indexes = peakutils.indexes(ySpect, thres = 0.1, min_dist = 0)
-    print (xSpect[indexes], ySpect[indexes])
-    plt.figure()
-    pplot(xSpect,ySpect, indexes)
-    plt.title('Détection des pics')
-    plt.xlabel('Ordre')
-    plt.ylabel('Amplitude')
-    plt.legend()
-    plt.show()
+    #indexes = peakutils.indexes(ySpect, thres = 0.1, min_dist = 0)
+    #peaks = (xSpect[indexes], ySpect[indexes])
+    #
+    #for value in indexes:
+    #    print ("(",xSpect[value],",",ySpect[value],",", value,")")
+    #plt.figure()
+    #pplot(xSpect,ySpect, indexes)
+    #plt.title('Détection des pics')
+    #plt.xlabel('Ordre')
+    #plt.ylabel('Amplitude')
+    #plt.legend()
+    #plt.show()
+
+    print ("FFTG :")
+    FaultFinderBearings(xSpect,ySpect)
 
 def FFTV(xInput,yInput, RotationFreq):
     xLength = int(len(xInput))
@@ -46,7 +53,7 @@ def FFTV(xInput,yInput, RotationFreq):
     y_spect = (9810 * (np.sqrt(2)/2))/(2*num*np.pi) * np.abs(ywm[0:num])
     
     x_spect[0] = 0
-    x_spect = x_spect/RotationFreq
+    x_spect = x_spect/RotationFreq  
     y_spect = np.divide(y_spect[1:],x_spect[1:])
     y_spect = np.concatenate(([0],y_spect))
 
@@ -57,10 +64,105 @@ def FFTV(xInput,yInput, RotationFreq):
     plt.ylabel('Amplitude')
     plt.show()
 
-    indexes = peakutils.indexes(y_spect, thres = 0, min_dist = 0)
-    print (x_spect[indexes], y_spect[indexes])
+    #indexes = peakutils.indexes(y_spect, thres = 0.1, min_dist = 0)
+    #peaks_x = (x_spect[indexes])
+    #peaks_y = (y_spect[indexes])
+    #for value in indexes:
+    #    print ("Peaks : (",x_spect[value],",",y_spect[value],",", value,")")
+    #print ("Peaks v2 : (",peaks_x,",",peaks_y,")")
+    #plt.figure()
+    #pplot(x_spect,y_spect, indexes)
+    #plt.title('Détection des pics')
+    #plt.xlabel('Ordre')
+    #plt.ylabel('Amplitude')
+    #plt.legend()
+    #plt.show()
+    print ("FFTV : ")
+    FaultFinderBearings(x_spect,y_spect)
+
+
+def FaultFinderBearings(x, y):
+
+    indexes = peakutils.indexes(y, thres = 0.1, min_dist = 0)
+    peaks_x = (x[indexes])
+    peaks_y = (y[indexes])
+    for value in indexes:
+        print ("Peaks : (",x[value],",",y[value],",", value,")")
+    print ("Peaks v2 : (",peaks_x,",",peaks_y,")")
+
+    
+# On divise les fréquences (en ordres) en plusieurs zones pour analyse approfondie et détection des défauts
+                    #splitSub = peaks_x.searchsorted([0,1])
+                    #splitLow = peaks_x.searchsorted([1, 2.5])
+                    #splitMid = peaks_x.searchsorted([2.5, 4.5])
+                    #splitHigh = peaks_x.searchsorted([4.5, 20.5])
+                    #splitVeryHigh = peaks_x.searchsorted([20.5, 1000])
+                    #xLow = np.split(peaks_x,splitLow)
+                    #xMid = np.split(peaks_x,splitMid)
+                    #xHigh = np.split(peaks_x,splitHigh)
+                    #xVeryHigh = np.split(peaks_x,splitVeryHigh)
+                     # peut être utile plus tard ou probablement pas mdr, ça permet de split un array dans 2 (qui du coup fait 2 array dans 1 array)
+
+    #contiennent les valeurs en fréquence des pics
+    xSub = peaks_x[peaks_x <= 1] 
+    xLow = peaks_x[(peaks_x > 1) & (peaks_x <= 2.5)] 
+    xMid = peaks_x[(peaks_x > 2.5) &(peaks_x <= 4.5)] 
+    xHigh = peaks_x[(peaks_x > 4.5) & (peaks_x <= 20.5)] 
+    xVeryHigh = peaks_x[(peaks_x > 20.5) & (peaks_x < 1000)]
+
+    #Récupérer les index pour ensuite récupérer les coordonnées en y par zone
+
+    xSubIndexes = np.nonzero(peaks_x <= 1) 
+    xLowIndexes = np.nonzero((peaks_x > 1) & (peaks_x <= 2.5)) 
+    xMidIndexes  = np.nonzero((peaks_x > 2.5) & (peaks_x <= 4.5)) 
+    xHighIndexes = np.nonzero((peaks_x > 4.5) & (peaks_x <= 20.5)) 
+    xVeryHighIndexes =  np.nonzero((peaks_x > 20.5) & (peaks_x < 1000)) 
+
+    # Récupérer les coordonnées en y
+    
+    ySub = peaks_y[xSubIndexes]
+    yLow = peaks_y[xLowIndexes]
+    yMid = peaks_y[xMidIndexes]    
+    yHigh = peaks_y[xHighIndexes]   
+    yVeryHigh = peaks_y[xVeryHighIndexes]
+
+    print ("Tentative : (",xSub,", oui ,",ySub,")")
+
+    # Analyse des fréquences sous la fréquence de rotation de la machine (sous l'ordre 1) [pas finito]
+
+    ySubMax = max(ySub)
+    ySubMaxIndex = ySub.argmax()
+    xSubMax = xSub[ySubMaxIndex]
+    print("Sous 1 ordre, pic maximum : (",xSubMax,",",ySubMax,")")
+
+
+    #Suite [pas finito]
+
+    yLowMax = max(yLow)
+    yLowMaxIndex = yLow.argmax()
+    xLowMax = xLow[yLowMaxIndex]
+    print("Entre 1 et 2,5 ordres, pic maximum : (",xLowMax,",",yLowMax,")")
+
+    yMidMax = max(yMid)
+    yMidMaxIndex = yMid.argmax()
+    xMidMax = xMid[yMidMaxIndex]
+    print("Entre 2,5 et 4,5 ordres, pic maximum : (",xMidMax,",",yMidMax,")")
+
+    yHighMax = max(yHigh)
+    yHighMaxIndex = yHigh.argmax()
+    xHighMax = xHigh[yHighMaxIndex]
+    print("Entre 4,5 et 20,5 ordres, pic maximum : (",xHighMax,",",yHighMax,")")
+
+    yVeryHighMax = max(yVeryHigh)
+    yVeryHighMaxIndex = yVeryHigh.argmax()
+    xVeryHighMax = xVeryHigh[yVeryHighMaxIndex]
+    print("Entre 20,5 et 1000 ordres, pic maximum : (",xVeryHighMax,",",yVeryHighMax,")")
+
+
+
+
     plt.figure()
-    pplot(x_spect,y_spect, indexes)
+    pplot(x,y, indexes)
     plt.title('Détection des pics')
     plt.xlabel('Ordre')
     plt.ylabel('Amplitude')
@@ -92,12 +194,12 @@ def txtReader (path):
     if (speed_unit=="RPM"):
         RotationFreq = speed/60
     vibration = np.array(data_vibration)
-    print (time, vibration, RotationFreq)
+    #print (time, vibration, RotationFreq)
     return (time, vibration, RotationFreq)
 
 
 
-path_meas = r'C:\Users\Lenovo\Documents\Projet MA1\Fichiers BDD\Selected\Belt\EC27.13_ZONE1\AVA-20151221.txt'
+path_meas = r'C:\Users\Lenovo\Documents\Projet MA1\Fichiers BDD\Selected\BPFI\EC27.13_ZONE1\CVP-20150603.txt'
 (time, vibration, rotationFrequency) = txtReader(path_meas)
 FFTG(time, vibration, rotationFrequency)
 FFTV(time, vibration, rotationFrequency)

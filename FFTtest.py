@@ -1,14 +1,12 @@
-
 import numpy
 from scipy.fftpack import fft
 from scipy.signal import find_peaks
 from scipy import signal
 import matplotlib.pyplot as plt
 
-
 def FFTG(xInput, yInput):
     """
-    This function calculate the Frequential Fourier Transform in Acceleration 
+    This function calculate the Frequential Fourier Transform in Acceleration
 
     Parameters
     ----------
