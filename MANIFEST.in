@@ -1,2 +1,3 @@
 #Include de data with icons during the pip installation
 include orangeML/clockworkML/widgetsML/icons/*
+include orangeML/clockworkML/widgetsML/QTGui/*
