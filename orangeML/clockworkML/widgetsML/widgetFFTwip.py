@@ -1,10 +1,12 @@
 from Orange.widgets.widget import OWWidget
 from Orange.widgets.utils.signals import Input, Output
 from Orange.widgets import settings, widget, gui
-from Orange.data import Table, Domain
+from Orange.data import Table, Domain, ContinuousVariable, DiscreteVariable
 from Orange.widgets.widget import Msg
 import numpy
 from scipy.fftpack import fft
+
+import matplotlib.pyplot
 
 class dataProcessing:
     def fft(self, xInput, yInput):
@@ -35,11 +37,13 @@ class dataProcessing:
         ySpectral = 2.0/xLength * numpy.abs(ywm[0:int(xLength/2)])
         return xSpectral, ySpectral
     def dataTableBuilder(self, xInput, yInput):
-        yInput = yInput.swapaxes(0, 1)
-        yInput = yInput[0,:]
-        domain = numpy.stack([xInput,yInput])
-        domain = Domain.from_numpy(domain)
-        dataTable = Table(domain,numpy.stack([xInput,yInput]))
+        yInput = numpy.array(yInput)
+        xInput = numpy.array(xInput)
+        preBuildArray = numpy.stack([xInput, yInput])
+        preBuildArray = preBuildArray.swapaxes(0, 1)
+        print(preBuildArray)
+        domain = Domain([ContinuousVariable("Time"),ContinuousVariable("Acceleration")])
+        dataTable = Table(domain, preBuildArray) 
         return dataTable
 
 class widgetFFT(OWWidget):
@@ -59,14 +63,51 @@ class widgetFFT(OWWidget):
     @Inputs.inputWidget
     def set_data(self, dataset):
         if dataset is not None:
+            rowDataSelected = dataset[[0]]
+            formattingData = str(rowDataSelected)
+            formattingData = formattingData.split(']')
+            formattingData = formattingData[1]
+            formattingData = formattingData.replace('[', '')
+            formattingData = formattingData.replace(']', '')
+            formattingData = formattingData.replace(' ', '')
+            formattingData = formattingData.replace('{', '')
+            formattingData = formattingData.split(',')
+            formatedDataX = []
+            formatedDataY = []
+            curlyBraceFlag = 0
+            for iFD in formattingData:
+                if curlyBraceFlag == 1:
+                    if iFD.__contains__('}') == True:
+                        iFD = iFD.replace('}', '')
+                    formatedDataX.append(float(iFD))
+                if curlyBraceFlag == 0:
+                    if iFD.__contains__('}') == True:
+                        iFD = iFD.replace('}', '')
+                        curlyBraceFlag = 1
+                    formatedDataY.append(float(iFD))
             dP = dataProcessing()
-            [xSpectralFFTG,ySpectralFFTG] = dP.fft(dataset[:,0], dataset[:,1])
+            [xSpectralFFTG,ySpectralFFTG] = dP.fft(formatedDataX, formatedDataY)
+            figure, axis = matplotlib.pyplot.subplots(1,2)
+            axis[0].plot(xSpectralFFTG,ySpectralFFTG)
+            axis[0].set_title("FFTG")
+            axis[0].set_xlabel ('Fréquences (Hz)')
+            axis[0].set_ylabel ('Amplitude')
+            axis[1].plot(formatedDataX,formatedDataY)
+            axis[1].set_title("Data")
+            axis[1].set_xlabel ('Time [s]')
+            axis[1].set_ylabel ('Amplitude')
+            matplotlib.pyplot.show()
             dataTableOutput = dP.dataTableBuilder(xSpectralFFTG, ySpectralFFTG)
-            print(dataTableOutput)
+            print(f"Output data.Table {dataTableOutput}")
             self.Outputs.outputWidget.send(dataTableOutput)
         else:
-            self.infoa.setText('No data on input yet, waiting to get something.')
-            self.Outputs.sample.send("Sampled Data")
+            print("No data supplied !")
 
 if __name__ == "__main__":
     print("Unit Test")
+    dP = dataProcessing()
+    xSpectralFFTG = [1,2,3]
+    ySpectralFFTG = [4,5,6]
+    print(f"Pre processed data \n {[xSpectralFFTG,ySpectralFFTG]} \n *******************")
+    dataTableOutput = dP.dataTableBuilder(xSpectralFFTG, ySpectralFFTG)
+    print(f"Output data.Table.domain {dataTableOutput.domain}")
