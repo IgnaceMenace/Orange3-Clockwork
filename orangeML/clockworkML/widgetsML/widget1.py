@@ -4,24 +4,55 @@ from Orange.widgets import settings, widget, gui
 from Orange.data import Table
 from Orange.widgets.widget import Msg
 
+import matplotlib.pyplot
+
 class widget1(OWWidget):
     name = "First Widget"
     icon = "icons/widget1.svg"
     description = "First widget, input something and return something else"    
-    number = 2
-    class input:
-        inputwidget1 = Input("first input", int)
-    class output:
-        ouputwidget1 = Output("first output", int)
+    class Inputs:
+        inputWidget = Input("first input", Table)
+    class Outputs:
+        outputWidget = Output("first output", Table)
     class error(widget.OWWidget.Error):
         defaultError = Msg("Error while treating data")
     def __init__(self):
         super().__init__()
-        print("test")
-        infobox = gui.widgetBox(self.controlArea, "Info")    
-        gui.widgetLabel(infobox,"ca marche ??????")
-        gui.widgetBox(self.controlArea, "Input status")
-#        self.error.defaultError()
+
+    @Inputs.inputWidget
+    def set_data(self,dataset):
+        if dataset is not None:
+            
+            rowDataSelected = dataset[[0]]
+            formattingData = str(rowDataSelected)
+            formattingData = formattingData.split(']')
+            formattingData = formattingData[1]
+            formattingData = formattingData.replace('[', '')
+            formattingData = formattingData.replace(']', '')
+            formattingData = formattingData.replace(' ', '')
+            formattingData = formattingData.replace('{', '')
+            formattingData = formattingData.split(',')
+
+            formatedDataX = []
+            formatedDataY = []
+            curlyBraceFlag = 0
+            for iFD in formattingData:
+                if curlyBraceFlag == 1:
+                    if iFD.__contains__('}') == True:
+                        iFD = iFD.replace('}', '')
+                    formatedDataY.append(float(iFD))
+                if curlyBraceFlag == 0:
+                    if iFD.__contains__('}') == True:
+                        iFD = iFD.replace('}', '')
+                        curlyBraceFlag = 1
+                    formatedDataX.append(float(iFD))
+
+            matplotlib.pyplot.plot(formatedDataY, formatedDataX)
+            matplotlib.pyplot.show()
+            self.Outputs.outputWidget.send(dataset)
+
+        else:
+            print("No data supplied !")
 
 
 if __name__ == "__main__":
