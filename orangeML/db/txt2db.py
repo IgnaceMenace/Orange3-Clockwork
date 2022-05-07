@@ -73,7 +73,6 @@ def brg2db(filepath):
             print(values)
     
 def blt2db(filepath):
-
     query = "INSERT INTO \"Belts\" (\"IDBelt\", \"BeltType\", \"BeltFreq\", \"Speed2Out\", \"Sheave1\", \"Sheave2\", \"BeltLength\") VALUES (%s, %s, %s, %s, %s, %s, %s)"
     skipCount = 0
     f=open(filepath, 'r')
