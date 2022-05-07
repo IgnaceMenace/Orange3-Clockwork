@@ -29,6 +29,22 @@ def connect():
             conn.close()    
             print ('Database connection closed')
 
+def insert2db (newQuery, newValues):
+    
+    params = config()
+    conn = pg.connect(**params)
+    cur = conn.cursor()
+
+    try:
+        cur.execute(newQuery, newValues)
+        conn.commit()
+
+    except (Exception, Error) as error:
+      print('Error while inserting data : ', error)
+    if conn is not None:
+            cur.close()
+            conn.close()  
+            print ('Database connection closed')  
 
 def brg2db(filepath):
 
@@ -53,27 +69,9 @@ def brg2db(filepath):
             vBPFO = float(newLine2[3])
             vBPFI = float(newLine2[4])
             values = (vID, vType, vBR, vFTF, vBSF, vBPFO, vBPFI)
-            insert_brg(query, values)
+            insert2db(query, values)
             print(values)
     
-
-def insert_brg (newQuery, newValues):
-    
-    params = config()
-    conn = pg.connect(**params)
-    cur = conn.cursor()
-
-    try:
-        cur.execute(newQuery, newValues)
-        conn.commit()
-
-    except (Exception, Error) as error:
-      print('Error while inserting data : ', error)
-    if conn is not None:
-            cur.close()
-            conn.close()  
-            print ('Database connection closed')  
-            
 def blt2db(filepath):
 
     query = "INSERT INTO \"Belts\" (\"IDBelt\", \"BeltType\", \"BeltFreq\", \"Speed2Out\", \"Sheave1\", \"Sheave2\", \"BeltLength\") VALUES (%s, %s, %s, %s, %s, %s, %s)"
@@ -86,7 +84,7 @@ def blt2db(filepath):
             currentLine2 = line[32:].split(' ')
             newLine1 = currentLine1
             newLine2 = [x.strip() for x in currentLine2 if x]
-                
+
             ID=int(newLine1[0:8].strip())
             Type=newLine1[8:].strip()
             Freq=float(newLine2[0])
@@ -95,25 +93,8 @@ def blt2db(filepath):
             Sheave2=float(newLine2[3])
             Length=float(newLine2[4])
             values = (ID, Type, Freq, Speed, Sheave1, Sheave2, Length)
-            insert_blt(query, values)
+            insert2db(query, values)
             print (values)
-
-def insert_blt (newQuery, newValues):
-
-    params = config()
-    conn = pg.connect(**params)
-    cur = conn.cursor()
-
-    try:
-        cur.execute(newQuery, newValues)
-        conn.commit()
-
-    except (Exception, Error) as error:
-        print('Error while inserting data :', error)
-    if conn is not None:
-        cur.close()
-        conn.close()
-        print ('Database connection closed')
 
 def meas2db(filepath):
     
@@ -165,25 +146,7 @@ def meas2db(filepath):
                     #data_time = (start,stop,step) 
 
                     values = (date, area, equipment, POM, speed, load, data_vibration, time_temp)
-                    insert_meas(query, values)
-
-
-def insert_meas (newQuery, newValues):
-
-    params = config()
-    conn = pg.connect(**params)
-    cur = conn.cursor()
-
-    try:
-        cur.execute(newQuery, newValues)
-        conn.commit()
-
-    except (Exception, Error) as error:
-        print('Error while inserting data :', error)
-    if conn is not None:
-        cur.close()
-        conn.close()
-        print ('Database connection closed')
+                    insert2db(query, values)
 
 if __name__ == '__main__':
     path_brg = r'C:\Users\Lenovo\Documents\Projet MA1\Fichiers BDD\FaultFreqs\Bearings.txt'
