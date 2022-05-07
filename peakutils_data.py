@@ -38,7 +38,7 @@ def FFTG(xInput, yInput, RotationFreq):
     #plt.show()
 
     print ("FFTG :")
-    FaultFinderBearings(xSpect,ySpect)
+    #FaultFinderBearings(xSpect,ySpect)
 
 def FFTV(xInput,yInput, RotationFreq):
     xLength = int(len(xInput))
@@ -78,7 +78,7 @@ def FFTV(xInput,yInput, RotationFreq):
     #plt.legend()
     #plt.show()
     print ("FFTV : ")
-    FaultFinderBearings(x_spect,y_spect)
+    #FaultFinderBearings(x_spect,y_spect)
 
 
 def FaultFinderBearings(x, y):
@@ -101,7 +101,7 @@ def FaultFinderBearings(x, y):
                     #xMid = np.split(peaks_x,splitMid)
                     #xHigh = np.split(peaks_x,splitHigh)
                     #xVeryHigh = np.split(peaks_x,splitVeryHigh)
-                     # peut être utile plus tard ou probablement pas mdr, ça permet de split un array dans 2 (qui du coup fait 2 array dans 1 array)
+                     # peut être utile plus tard, ça permet de split un array dans 2 (qui du coup fait 2 array dans 1 array)
 
     #contiennent les valeurs en fréquence des pics
     xSub = peaks_x[peaks_x <= 1] 
@@ -225,7 +225,14 @@ def txtReader (path):
 
 
 
-path_meas = r'C:\Users\Lenovo\Documents\Projet MA1\Fichiers BDD\Selected\FTF\EC27.62_ZONE6\CVP-20160919.txt'
+path_meas = r'C:\Users\Lenovo\Documents\Projet MA1\Fichiers BDD\Selected\Healthy\GE27.24D_LOGISTIQUE\DVA-20150310.txt'
 (time, vibration, rotationFrequency) = txtReader(path_meas)
 FFTG(time, vibration, rotationFrequency)
-FFTV(time, vibration, rotationFrequency)
+
+path_meas = r'C:\Users\Lenovo\Documents\Projet MA1\Fichiers BDD\Selected\BSF\GE27.24D_LOGISTIQUE\DVA-20151001.txt'
+(time, vibration, rotationFrequency) = txtReader(path_meas)
+FFTG(time, vibration, rotationFrequency)
+
+path_meas = r'C:\Users\Lenovo\Documents\Projet MA1\Fichiers BDD\Selected\Healthy\GE27.24D_LOGISTIQUE\CVV-20150310.txt'
+(time, vibration, rotationFrequency) = txtReader(path_meas)
+#FFTV(time, vibration, rotationFrequency)
