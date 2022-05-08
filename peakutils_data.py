@@ -38,7 +38,7 @@ def FFTG(xInput, yInput, RotationFreq):
     #plt.show()
 
     print ("FFTG :")
-    #FaultFinderBearings(xSpect,ySpect)
+    FaultFinderBearings(xSpect,ySpect)
 
 def FFTV(xInput,yInput, RotationFreq):
     xLength = int(len(xInput))
@@ -78,12 +78,12 @@ def FFTV(xInput,yInput, RotationFreq):
     #plt.legend()
     #plt.show()
     print ("FFTV : ")
-    #FaultFinderBearings(x_spect,y_spect)
+    FaultFinderBearings(x_spect,y_spect)
 
 
 def FaultFinderBearings(x, y):
 
-    indexes = peakutils.indexes(y, thres = 0.06, min_dist = 0, thres_abs=True)
+    indexes = peakutils.indexes(y, thres = 0.02, min_dist = 0, thres_abs=True)
     peaks_x = (x[indexes])
     peaks_y = (y[indexes])
     for value in indexes:
@@ -131,32 +131,32 @@ def FaultFinderBearings(x, y):
     # Analyse des fréquences sous la fréquence de rotation de la machine (sous l'ordre 1) [pas finito]
 
         #On récup le pic max
-    ySubMax = max(ySub)
-    ySubMaxIndex = ySub.argmax()
-    xSubMax = xSub[ySubMaxIndex]
-    print("Sous 1 ordre, pic maximum : (",xSubMax,",",ySubMax,")")
+    #ySubMax = max(ySub)
+    #ySubMaxIndex = ySub.argmax()
+    #xSubMax = xSub[ySubMaxIndex]
+    #print("Sous 1 ordre, pic maximum : (",xSubMax,",",ySubMax,")")
 
         #FTF - Cage - On cherche un pic aux multiples de la fréquence du pic max
     
-    FtfCheck1 = xSubMax*2
-    FtfCheck2 = xSubMax*3
-    FtfCheck3 = xSubMax*4
-    FtfCheckIndex1 = np.nonzero(peaks_x == (xSubMax*2))
-    FtfCheckIndex2 = np.nonzero((peaks_x > (xSubMax*3-0.01)) & (peaks_x < (xSubMax*3+0.01)))
-    FtfCheckIndex3 = np.nonzero((peaks_x > (xSubMax*4-0.01)) & (peaks_x < (xSubMax*4+0.01)))
-    print ("Index 1: ",FtfCheckIndex1)
-    print ("Index 2: ",FtfCheckIndex2)
-    print ("Index 3: ",FtfCheckIndex3)
-
-    FTFCheck_x = np.array([peaks_x[FtfCheckIndex1], peaks_x[FtfCheckIndex2],peaks_x[FtfCheckIndex3]])
-    FTFCheck_y = np.array([peaks_y[FtfCheckIndex1], peaks_y[FtfCheckIndex2],peaks_y[FtfCheckIndex3]])
-
-    print(FTFCheck_x)
-    print (FTFCheck_y)
-
-    if ((FTFCheck_x.size == 3)):
-        if ((FTFCheck_y[0] < ySubMax) & (FTFCheck_y[1] < FTFCheck_y[0]) & (FTFCheck_y[2] < FTFCheck_y[1])):
-           print ("sOUCI DE CAGE")
+    #FtfCheck1 = xSubMax*2
+    #FtfCheck2 = xSubMax*3
+    #FtfCheck3 = xSubMax*4
+    #FtfCheckIndex1 = np.nonzero(peaks_x == (xSubMax*2))
+    #FtfCheckIndex2 = np.nonzero((peaks_x > (xSubMax*3-0.01)) & (peaks_x < (xSubMax*3+0.01)))
+    #FtfCheckIndex3 = np.nonzero((peaks_x > (xSubMax*4-0.01)) & (peaks_x < (xSubMax*4+0.01)))
+    #print ("Index 1: ",FtfCheckIndex1)
+    #print ("Index 2: ",FtfCheckIndex2)
+    #print ("Index 3: ",FtfCheckIndex3)
+#
+    #FTFCheck_x = np.array([peaks_x[FtfCheckIndex1], peaks_x[FtfCheckIndex2],peaks_x[FtfCheckIndex3]])
+    #FTFCheck_y = np.array([peaks_y[FtfCheckIndex1], peaks_y[FtfCheckIndex2],peaks_y[FtfCheckIndex3]])
+#
+    #print(FTFCheck_x)
+    #print (FTFCheck_y)
+#
+    #if ((FTFCheck_x.size == 3)):
+    #    if ((FTFCheck_y[0] < ySubMax) & (FTFCheck_y[1] < FTFCheck_y[0]) & (FTFCheck_y[2] < FTFCheck_y[1])):
+    #       print ("sOUCI DE CAGE")
 
     #Suite [pas finito]
 

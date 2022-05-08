@@ -28,19 +28,22 @@ def FFTG(xInput, yInput, RotationFreq):
 
 
 def Model_PeakDetect(X,Y):
-    indexes = peakutils.indexes(Y, thres = 0.03, min_dist = 0, thres_abs=True)
+    base = peakutils.baseline(Y, 2)
+    Y_nobase = Y-base
+    indexes = peakutils.peak.indexes(Y_nobase, thres = 0.03, min_dist = 0, thres_abs=True)
     peaks_x = []
     peaks_y =[]
     for value in indexes:
-        peaks_x.append(X[value])
-        peaks_y.append(Y[value])
+        peaks_x.append(Y_nobase[value])
+        peaks_y.append(Y_nobase[value])
     peaks_x = np.array(peaks_x)
     peaks_y = np.array(peaks_y)  
+    #peaks_x = peakutils.interpolate(X,Y_nobase,ind=indexes)
     iForest = IsolationForest(n_estimators=20, verbose=2)
     peaks = np.column_stack((peaks_x,peaks_y))
     iForest.fit(peaks)
     pred = iForest.predict(peaks)
-    plt.plot(X,Y)
+    plt.plot(X, Y_nobase)
     plt.scatter(peaks[:,0], peaks[:,1], c=pred, cmap='RdBu')
 
 
