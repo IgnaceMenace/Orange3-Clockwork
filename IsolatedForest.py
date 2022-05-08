@@ -30,20 +30,21 @@ def FFTG(xInput, yInput, RotationFreq):
 def Model_PeakDetect(X,Y):
     base = peakutils.baseline(Y, 2)
     Y_nobase = Y-base
-    indexes = peakutils.peak.indexes(Y_nobase, thres = 0.03, min_dist = 0, thres_abs=True)
+    Y=Y_nobase
+    indexes = peakutils.indexes(Y, thres = 0.1, min_dist = 0, thres_abs=True)
     peaks_x = []
     peaks_y =[]
     for value in indexes:
-        peaks_x.append(Y_nobase[value])
-        peaks_y.append(Y_nobase[value])
+        peaks_x.append(X[value])
+        peaks_y.append(Y[value])
     peaks_x = np.array(peaks_x)
     peaks_y = np.array(peaks_y)  
-    #peaks_x = peakutils.interpolate(X,Y_nobase,ind=indexes)
-    iForest = IsolationForest(n_estimators=20, verbose=2)
+    
+    iForest = IsolationForest(n_estimators=40, verbose=3)
     peaks = np.column_stack((peaks_x,peaks_y))
     iForest.fit(peaks)
     pred = iForest.predict(peaks)
-    plt.plot(X, Y_nobase)
+    plt.plot(X, Y)
     plt.scatter(peaks[:,0], peaks[:,1], c=pred, cmap='RdBu')
 
 
@@ -80,7 +81,7 @@ def txtReader (path):
     return (time, vibration, RotationFreq)
 
 
-path_meas = r'C:\Users\Lenovo\Documents\Projet MA1\Fichiers BDD\Selected\BPFI\GE27.24A_LOGISTIQUE\CVA-20160919.txt'
+path_meas = r'C:\Users\Lenovo\Documents\Projet MA1\Fichiers BDD\Selected\BPFI\GE27.24A_LOGISTIQUE\CVP-20160919.txt'
 (time, vibration, rotationFrequency) = txtReader(path_meas)
 FFTG(time, vibration, rotationFrequency)
 

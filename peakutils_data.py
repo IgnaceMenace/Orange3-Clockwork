@@ -48,17 +48,17 @@ def FFTV(xInput,yInput, RotationFreq):
     stop = 1.0/(2.0*Period)
     num = int(xLength/2)
 
-    x_spect = np.linspace(0.0, 1.0/(2.0*Period), num, dtype=float)
+    xSpect = np.linspace(0.0, 1.0/(2.0*Period), num, dtype=float)
     ywm = fft(yInput)
-    y_spect = (9810 * (np.sqrt(2)/2))/(2*num*np.pi) * np.abs(ywm[0:num])
+    ySpect = (9810 * (np.sqrt(2)/2))/(2*num*np.pi) * np.abs(ywm[0:num])
     
-    x_spect[0] = 0
-    x_spect = x_spect/RotationFreq  
-    y_spect = np.divide(y_spect[1:],x_spect[1:])
-    y_spect = np.concatenate(([0],y_spect))
+    xSpect[0] = 0
+    xSpect = xSpect/RotationFreq  
+    ySpect = np.divide(ySpect[1:],xSpect[1:])
+    ySpect = np.concatenate(([0],ySpect))
 
     plt.figure()
-    plt.plot(x_spect,y_spect)
+    plt.plot(xSpect,ySpect)
     plt.title('FFTV')
     plt.xlabel('Ordre')
     plt.ylabel('Amplitude')
@@ -78,12 +78,12 @@ def FFTV(xInput,yInput, RotationFreq):
     #plt.legend()
     #plt.show()
     print ("FFTV : ")
-    FaultFinderBearings(x_spect,y_spect)
+    FaultFinderBearings(xSpect,ySpect)
 
 
 def FaultFinderBearings(x, y):
 
-    indexes = peakutils.indexes(y, thres = 0.02, min_dist = 0, thres_abs=True)
+    indexes = peakutils.indexes(y, thres = 0.1, min_dist = 0, thres_abs=True)
     peaks_x = (x[indexes])
     peaks_y = (y[indexes])
     for value in indexes:
@@ -158,7 +158,7 @@ def FaultFinderBearings(x, y):
     #    if ((FTFCheck_y[0] < ySubMax) & (FTFCheck_y[1] < FTFCheck_y[0]) & (FTFCheck_y[2] < FTFCheck_y[1])):
     #       print ("sOUCI DE CAGE")
 
-    #Suite [pas finito]
+    #Suite [pas fini]
 
     if not ((yLow == 0).all()):
         yLowMax = max(yLow)
@@ -225,7 +225,7 @@ def txtReader (path):
 
 
 
-path_meas = r'C:\Users\Lenovo\Documents\Projet MA1\Fichiers BDD\Selected\Healthy\GE27.24D_LOGISTIQUE\DVA-20150310.txt'
+path_meas = r'C:\Users\Lenovo\Documents\Projet MA1\Fichiers BDD\Selected\BPFI\GE27.24A_LOGISTIQUE\CVP-20160919.txt'
 (time, vibration, rotationFrequency) = txtReader(path_meas)
 FFTG(time, vibration, rotationFrequency)
 
