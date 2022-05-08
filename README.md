@@ -15,4 +15,10 @@ Note that on Windows, if it doesn't work, you should execute git command in the 
 
 `cd Orange3-Clockwork`
 
+Install the requirements
+
+`pip install -r requirements.txt`
+
+Install the add-on
+
 `pip install .`
