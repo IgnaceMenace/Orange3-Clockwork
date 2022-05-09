@@ -9,32 +9,9 @@ from peakutils.plot import plot
 from matplotlib import pyplot
 
 class dataProcessing:
-    def peakFinder(self,X,Y):
+    def GToV(self,X,Y):
         print("********************************************")
-        base = peakutils.baseline(Y, 2)
-        Y_nobase = Y-base
-        Y=Y_nobase
-        indexes = peakutils.indexes(Y, thres = 0.1, min_dist = 0, thres_abs=True)
-        peaks_x = []
-        peaks_y =[]
-        for value in indexes:
-            peaks_x.append(X[value])
-            peaks_y.append(Y[value])
-        peaks_x = np.array(peaks_x)
-        peaks_y = np.array(peaks_y)  
-        
-        iForest = IsolationForest(n_estimators=40, verbose=3)
-        peaks = np.column_stack((peaks_x,peaks_y))
-        iForest.fit(peaks)
-        pred = iForest.predict(peaks)
-        plt.plot(X, Y)
-        plt.scatter(peaks[:,0], peaks[:,1], c=pred, cmap='RdBu')
 
-
-        pred_scores = -1*iForest.score_samples(peaks)
-        plt.scatter(peaks[:, 0], peaks[:, 1], c=pred_scores, cmap='coolwarm')
-        plt.colorbar(label='Anomaly Score')
-        plt.show()
 
 class widgetPeakFinder(OWWidget):
     name = "Peak Finder Widget"
@@ -54,7 +31,7 @@ class widgetPeakFinder(OWWidget):
         if dataset is not None:
             formattedData = numpy.array(dataset)
             dp = dataProcessing()
-            dp.peakFinder(formattedData[:,0], formattedData[:,1])
+            [PASFINI,HEIN] = dp.GToV(formattedData[:,0], formattedData[:,1])
             self.Outputs.outputWidget.send(dataset)
 
         else:

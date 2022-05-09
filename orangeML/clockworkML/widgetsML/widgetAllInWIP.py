@@ -77,7 +77,7 @@ class dataProcessing:
         return dataTable
 
 class widgetFFT(OWWidget):
-    name = "FFT Widget WIP Rewrite"
+    name = "All in One WIP"
     icon = "icons/widget1.svg"
     description = """Widget that calculate the FFTs out vibration data 
     and send the data via in an Orange.Table format"""   
