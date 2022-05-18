@@ -3,14 +3,15 @@ from Orange.widgets.utils.signals import Input, Output
 from Orange.widgets import settings, widget, gui
 from Orange.data import Table
 from Orange.widgets.widget import Msg
-import numpy
+import numpy as np
 import peakutils
+from sklearn.ensemble import IsolationForest
 from peakutils.plot import plot
 from matplotlib import pyplot
+import matplotlib.pyplot as plt
 
 class dataProcessing:
     def peakFinder(self,X,Y):
-        print("********************************************")
         base = peakutils.baseline(Y, 2)
         Y_nobase = Y-base
         Y=Y_nobase
@@ -52,14 +53,13 @@ class widgetPeakFinder(OWWidget):
     @Inputs.inputWidget
     def set_data(self,dataset):
         if dataset is not None:
-            formattedData = numpy.array(dataset)
+            formattedData = np.array(dataset)
             dp = dataProcessing()
             dp.peakFinder(formattedData[:,0], formattedData[:,1])
             self.Outputs.outputWidget.send(dataset)
 
         else:
             print("No data supplied !")
-
 
 if __name__ == "__main__":
     print("Unit test")

@@ -8,19 +8,13 @@ import peakutils
 from peakutils.plot import plot
 from matplotlib import pyplot
 from scipy import integrate
+from PyQt5.QtWidgets import *
+from PyQt5 import QtWidgets
 
 class dataProcessing:
-    def GToV(self,xInput,yInput):
-        """
-        Heavily inspired from J. VACHAUDEZ
-        """
-        T = numpy.diff(xInput).mean()
-        Fs = 1/T
-        xOutput = xInput
-        factor = 1000.0 * 9.81
-        yOutput = integrate.cumtrapz(yInput, dx=1.0/Fs) * factor
-        yOutput = numpy.insert(yOutput, 0, 0)
-        yOutput = yOutput-numpy.mean(yOutput)
+    def hzToOrder(self,xInput,yInput, rpm):
+        yOutput = yInput
+        xOutput = xInput / rpm
         return xOutput,yOutput
     def dataTableBuilder(self, xInput, yInput):
         yInput = numpy.array(yInput)
@@ -33,9 +27,9 @@ class dataProcessing:
         return dataTable
 
 class widgetGToV(OWWidget):
-    name = "Acceleration to velocity"
+    name = "Hz to order"
     icon = "icons/widget1.svg"
-    description = "This Widget transform a FFTG into a FFTV"    
+    description = "Transform your frequential data into order data with original RPM"    
     class Inputs:
         inputWidget = Input("input", Table)
     class Outputs:
@@ -44,6 +38,31 @@ class widgetGToV(OWWidget):
         defaultError = Msg("Error while treating data")
     def __init__(self):
         super().__init__()
+    want_main_area = False
+    resizing_enabled = True
+    
+    def onClickValB(self):
+        self.rpm = self.rSpeedTxt.text()
+
+    def guiBuilder(self):
+        self.rSpeedLbl = QLabel(self)
+        self.rSpeedLbl.setText("Rotating speed :")
+        self.rSpeedLbl.move(10,20)
+        self.rSpeedLbl.resize(90, 20)
+
+        self.rSpeedTxt = QLineEdit(self)
+        self.rSpeedTxt.move(110, 20)
+        self.rSpeedTxt.resize(100,20)
+
+        self.rpmLbl = QLabel(self)
+        self.rpmLbl.setText("RPM")
+        self.rpmLbl.move(220,20)
+        self.rpmLbl.resize(90, 20)
+
+        self.validateBtn = QPushButton('OK', self)
+        self.validateBtn.move(220,50)
+        self.validateBtn.resize(30,30)
+        self.validateBtn.clicked.connect(self.onClickValB)
 
     @Inputs.inputWidget
     def set_data(self,dataset):
@@ -51,14 +70,17 @@ class widgetGToV(OWWidget):
             formattedData = numpy.array(dataset)
             formattedDataX = formattedData[:,0]
             formattedDataY = formattedData[:,1]
+            self.guiBuilder()
+            self.rpm = self.rSpeedTxt.text()
+            if self.rpm == "":
+                self.rpm = 1
             dP = dataProcessing()
-            [xIntegrated,yIntegrated] = dP.GToV(formattedDataX, formattedDataY)
-            dataTableOutput = dP.dataTableBuilder(xIntegrated, yIntegrated)
+            [xOrdered,yOrdered] = dP.hzToOrder(formattedDataX, formattedDataY, int(self.rpm))
+            dataTableOutput = dP.dataTableBuilder(xOrdered, yOrdered)
             self.Outputs.outputWidget.send(dataTableOutput)
 
         else:
             print("No data supplied !")
-
 
 if __name__ == "__main__":
     print("Unit test")
