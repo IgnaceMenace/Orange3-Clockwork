@@ -22,8 +22,8 @@ class dataProcessing:
 class widgetFormat(OWWidget):
     name = "Data formatter"
     icon = "icons/widget1.svg"
-    description = """Widget that calculate the FFTs out vibration data 
-    and send the data via in an Orange.Table format"""   
+    description = """Widget that format the data from our personal source 
+    in the Orange.data way"""    
     class Inputs:
         inputWidget = Input("Data to process (input)", Table)
     class Outputs:

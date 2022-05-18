@@ -13,10 +13,10 @@ class dataProcessing:
         print("********************************************")
 
 
-class widgetPeakFinder(OWWidget):
-    name = "Peak Finder Widget"
+class widgetGToV(OWWidget):
+    name = "Acceleration to velocity"
     icon = "icons/widget1.svg"
-    description = "This Widget finds the peak in a 2 dimension array"    
+    description = "This Widget transform a FFTG into a FFTV"    
     class Inputs:
         inputWidget = Input("input", Table)
     class Outputs:

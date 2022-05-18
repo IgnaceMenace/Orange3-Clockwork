@@ -9,11 +9,11 @@ from scipy.fftpack import fft
 import matplotlib.pyplot
 
 
-class widgetFFT(OWWidget):
+class widgetPlot(OWWidget):
     name = "Matplotlib pyplot"
     icon = "icons/widget1.svg"
-    description = """Widget that calculate the FFTs out vibration data 
-    and send the data via in an Orange.Table format"""   
+    description = """Widget that plot data in the matplotlib.pyplot way
+    for a better visibility"""   
     class Inputs:
         inputWidget = Input("Data to process (input)", Table)
     class Outputs:
