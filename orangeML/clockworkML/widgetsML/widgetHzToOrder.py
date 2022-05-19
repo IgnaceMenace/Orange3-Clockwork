@@ -14,7 +14,7 @@ from PyQt5 import QtWidgets
 class dataProcessing:
     def hzToOrder(self,xInput,yInput, rpm):
         yOutput = yInput
-        xOutput = xInput / rpm
+        xOutput = xInput / (rpm / 60)
         return xOutput,yOutput
     def dataTableBuilder(self, xInput, yInput):
         yInput = numpy.array(yInput)
@@ -43,6 +43,10 @@ class widgetGToV(OWWidget):
     
     def onClickValB(self):
         self.rpm = self.rSpeedTxt.text()
+        dP = dataProcessing()
+        [xOrdered,yOrdered] = dP.hzToOrder(self.formattedDataX, self.formattedDataY, int(self.rpm))
+        dataTableOutput = dP.dataTableBuilder(xOrdered, yOrdered)
+        self.Outputs.outputWidget.send(dataTableOutput)
 
     def guiBuilder(self):
         self.rSpeedLbl = QLabel(self)
@@ -53,6 +57,7 @@ class widgetGToV(OWWidget):
         self.rSpeedTxt = QLineEdit(self)
         self.rSpeedTxt.move(110, 20)
         self.rSpeedTxt.resize(100,20)
+        self.rSpeedTxt.setText("1")
 
         self.rpmLbl = QLabel(self)
         self.rpmLbl.setText("RPM")
@@ -68,16 +73,9 @@ class widgetGToV(OWWidget):
     def set_data(self,dataset):
         if dataset is not None:
             formattedData = numpy.array(dataset)
-            formattedDataX = formattedData[:,0]
-            formattedDataY = formattedData[:,1]
+            self.formattedDataX = formattedData[:,0]
+            self.formattedDataY = formattedData[:,1]
             self.guiBuilder()
-            self.rpm = self.rSpeedTxt.text()
-            if self.rpm == "":
-                self.rpm = 1
-            dP = dataProcessing()
-            [xOrdered,yOrdered] = dP.hzToOrder(formattedDataX, formattedDataY, int(self.rpm))
-            dataTableOutput = dP.dataTableBuilder(xOrdered, yOrdered)
-            self.Outputs.outputWidget.send(dataTableOutput)
 
         else:
             print("No data supplied !")
